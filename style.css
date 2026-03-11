@@ -1,3 +1,16 @@
+/* 1. Register the custom font */
+@font-face {
+    font-family: 'Oi';
+    src: url('assets/Oi/Oi-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap; /* Helps text show up faster */
+}
+
+/* 2. Apply it to your elements */
+body, h1, h2, .username {
+    font-family: 'Oi', system-ui, sans-serif;
+}
 * {
     margin: 0;
     padding: 0;
