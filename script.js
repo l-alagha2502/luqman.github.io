@@ -1,48 +1,41 @@
-const phrases = ["Founder of Vast™", "Graphic Designer", "Sports Enthusiast", "Building something new"];
-let pIndex = 0; let cIndex = 0; let isDel = false;
+const textElement = document.getElementById('typewriter-text');
+const messages = [
+    "Founder of Vast™",
+    "Artist",
+    "Graphic Designer",
+    "Boxer",
+    "Basketballer",
+    "Reading Enthusiast",
+    "Social Guy"
+];
 
-function typeWriter() {
-    const current = phrases[pIndex];
-    const el = document.getElementById("typewriter");
+let messageIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+function type() {
+    const currentMessage = messages[messageIndex];
     
-    if (isDel) {
-        el.textContent = current.substring(0, cIndex - 1);
-        cIndex--;
+    if (isDeleting) {
+        textElement.textContent = currentMessage.substring(0, charIndex - 1);
+        charIndex--;
     } else {
-        el.textContent = current.substring(0, cIndex + 1);
-        cIndex++;
+        textElement.textContent = currentMessage.substring(0, charIndex + 1);
+        charIndex++;
     }
 
-    let speed = isDel ? 50 : 100;
+    let typeSpeed = isDeleting ? 50 : 100;
 
-    if (!isDel && cIndex === current.length) {
-        speed = 2000;
-        isDel = true;
-    } else if (isDel && cIndex === 0) {
-        isDel = false;
-        pIndex = (pIndex + 1) % phrases.length;
-        speed = 500;
+    if (!isDeleting && charIndex === currentMessage.length) {
+        typeSpeed = 2000; // Pause at end
+        isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        messageIndex = (messageIndex + 1) % messages.length;
+        typeSpeed = 500;
     }
 
-    setTimeout(typeWriter, speed);
+    setTimeout(type, typeSpeed);
 }
 
-const enterScreen = document.getElementById("enter-screen");
-const mainContent = document.getElementById("main-content");
-const video = document.getElementById("bg-video");
-const vol = document.getElementById("volume-control");
-
-enterScreen.addEventListener("click", () => {
-    enterScreen.style.opacity = "0";
-    setTimeout(() => {
-        enterScreen.classList.add("hidden");
-        mainContent.classList.remove("hidden");
-        video.play();
-        video.volume = 0.8;
-        typeWriter();
-    }, 500);
-});
-
-vol.addEventListener("input", (e) => {
-    video.volume = e.target.value;
-});
+document.addEventListener('DOMContentLoaded', type);
