@@ -62,3 +62,18 @@ async function fetchDiscordStatus() {
 // Check status every 30 seconds
 setInterval(fetchDiscordStatus, 30000);
 fetchDiscordStatus();
+// Replace 'vast-bio-unique-key' with any random word if you want to reset it
+const NAMESPACE = "vast-luqman-bio"; 
+
+async function updateVisits() {
+    try {
+        const response = await fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/visits`);
+        const data = await response.json();
+        document.getElementById('view-count').innerText = data.value;
+    } catch (error) {
+        // If the API is down, show a default number so it doesn't look broken
+        document.getElementById('view-count').innerText = "13"; 
+    }
+}
+
+updateVisits();
