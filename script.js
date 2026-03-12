@@ -1,79 +1,48 @@
-const textElement = document.getElementById('typewriter-text');
-const messages = [
-    "Founder of Vast™",
-    "Artist",
-    "Graphic Designer",
-    "Boxer",
-    "Basketballer",
-    "Reading Enthusiast",
-    "Social Guy"
-];
+const phrases = ["Founder of Vast™", "Graphic Designer", "Sports Enthusiast", "Building something new"];
+let pIndex = 0; let cIndex = 0; let isDel = false;
 
-let messageIndex = 0;
-let charIndex = 0;
-let isDeleting = false;
-
-function type() {
-    const currentMessage = messages[messageIndex];
+function typeWriter() {
+    const current = phrases[pIndex];
+    const el = document.getElementById("typewriter");
     
-    if (isDeleting) {
-        textElement.textContent = currentMessage.substring(0, charIndex - 1);
-        charIndex--;
+    if (isDel) {
+        el.textContent = current.substring(0, cIndex - 1);
+        cIndex--;
     } else {
-        textElement.textContent = currentMessage.substring(0, charIndex + 1);
-        charIndex++;
+        el.textContent = current.substring(0, cIndex + 1);
+        cIndex++;
     }
 
-    let typeSpeed = isDeleting ? 50 : 100;
+    let speed = isDel ? 50 : 100;
 
-    if (!isDeleting && charIndex === currentMessage.length) {
-        typeSpeed = 2000; // Pause at end
-        isDeleting = true;
-    } else if (isDeleting && charIndex === 0) {
-        isDeleting = false;
-        messageIndex = (messageIndex + 1) % messages.length;
-        typeSpeed = 500;
+    if (!isDel && cIndex === current.length) {
+        speed = 2000;
+        isDel = true;
+    } else if (isDel && cIndex === 0) {
+        isDel = false;
+        pIndex = (pIndex + 1) % phrases.length;
+        speed = 500;
     }
 
-    setTimeout(type, typeSpeed);
+    setTimeout(typeWriter, speed);
 }
 
-document.addEventListener('DOMContentLoaded', type);
-const DISCORD_ID = "1418221224261193889";
+const enterScreen = document.getElementById("enter-screen");
+const mainContent = document.getElementById("main-content");
+const video = document.getElementById("bg-video");
+const vol = document.getElementById("volume-control");
 
-async function fetchDiscordStatus() {
-    try {
-        const response = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`);
-        const data = await response.json();
-        const statusDot = document.getElementById('discord-status');
-        
-        if (data.success) {
-            const status = data.data.discord_status;
-            statusDot.className = 'status-dot'; // Reset
-            if (status === 'online') statusDot.classList.add('online');
-            if (status === 'idle') statusDot.classList.add('idle');
-            if (status === 'dnd') statusDot.classList.add('dnd');
-        }
-    } catch (error) {
-        console.error("Lanyard Error:", error);
-    }
-}
+enterScreen.addEventListener("click", () => {
+    enterScreen.style.opacity = "0";
+    setTimeout(() => {
+        enterScreen.classList.add("hidden");
+        mainContent.classList.remove("hidden");
+        video.play();
+        video.volume = 0.8;
+        typeWriter();
+    }, 500);
+});
 
-// Check status every 30 seconds
-setInterval(fetchDiscordStatus, 30000);
-fetchDiscordStatus();
-// Replace 'vast-bio-unique-key' with any random word if you want to reset it
-const NAMESPACE = "vast-luqman-bio"; 
-
-async function updateVisits() {
-    try {
-        const response = await fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/visits`);
-        const data = await response.json();
-        document.getElementById('view-count').innerText = data.value;
-    } catch (error) {
-        // If the API is down, show a default number so it doesn't look broken
-        document.getElementById('view-count').innerText = "13"; 
-    }
-}
-
-updateVisits();
+vol.addEventListener("input", (e) => {
+    video.volume = e.target.value;
+});
