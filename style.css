@@ -102,3 +102,23 @@ body { background: #000; color: white; overflow: hidden; }
 .online { background-color: #43b581 !important; }
 .idle { background-color: #faa61a !important; }
 .dnd { background-color: #f04747 !important; }
+.stats-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.stat-item {
+    display: flex;
+    gap: 5px;
+}
+
+#view-count {
+    color: white; /* Makes the number stand out */
+    font-weight: bold;
+}
